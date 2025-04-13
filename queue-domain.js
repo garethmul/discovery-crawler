@@ -1,8 +1,8 @@
 import fetch from 'node-fetch';
 
-const API_URL = 'http://localhost:3009/api/scrape';
-const API_KEY = 'test-api-key-123';
-const DOMAIN = 'hachette.co.uk';
+const API_URL = process.env.API_BASE_URL || 'http://localhost:3009/api/scrape';
+const API_KEY = process.env.API_KEY || 'test-api-key-123';
+const DOMAIN = process.env.DOMAIN || 'hachette.co.uk';
 
 async function queueDomain() {
   try {
@@ -47,7 +47,7 @@ async function pollJobStatus(jobId) {
   
   while (!complete && attempts < maxAttempts) {
     try {
-      const response = await fetch(`http://localhost:3009/api/scrape/jobs/${jobId}`, {
+      const response = await fetch(`${API_URL}/jobs/${jobId}`, {
         headers: {
           'Authorization': `Bearer ${API_KEY}`
         }
@@ -85,7 +85,7 @@ async function pollJobStatus(jobId) {
 
 async function getJobResults(jobId) {
   try {
-    const response = await fetch(`http://localhost:3009/api/scrape/results/${jobId}`, {
+    const response = await fetch(`${API_URL}/results/${jobId}`, {
       headers: {
         'Authorization': `Bearer ${API_KEY}`
       }
